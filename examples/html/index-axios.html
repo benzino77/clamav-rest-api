@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClamAV REST API</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"
+      integrity="sha256-T/f7Sju1ZfNNfBh7skWn0idlCBcI3RwdLSS4/I7NQKQ="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <form onsubmit="return false;">
+      <div>
+        <input
+          type="file"
+          multiple
+          name="fileupload1"
+          value="fileupload1"
+          id="fileupload1"
+        />
+        <label for="fileupload1"> Select files to scan</label>
+      </div>
+      <div>
+        <input
+          type="file"
+          multiple
+          name="fileupload2"
+          value="fileupload2"
+          id="fileupload2"
+        />
+        <label for="fileupload2"> Select another files to scan</label>
+      </div>
+      <button id="post" type="button" onclick="checkFiles()">POST</button>
+    </form>
+    <div id="output"></div>
+    <script>
+      function checkFiles() {
+        const file1Select = document.getElementById('fileupload1');
+        const file2Select = document.getElementById('fileupload2');
+        const message = document.getElementById('output');
+        const files1 = file1Select.files;
+        const files2 = file2Select.files;
+
+        const form = new FormData();
+        for (let i = 0; i < files1.length; i++) {
+          form.append('FILES', files1[i], files1[i].name);
+        }
+        for (let i = 0; i < files2.length; i++) {
+          form.append('FILES', files2[i], files2[i].name);
+        }
+
+        axios
+          .post('http://localhost:3000/api/v1/scan', form, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((res) => {
+            let msg = '';
+            res.data.data.result.forEach((f) => {
+              msg = `${msg}<div>File: ${f.name} is ${
+                f.is_infected ? 'infected!!' : 'not infected'
+              }</div>`;
+            });
+            message.innerHTML = msg;
+          })
+          .catch((e) => {
+            let msg = '';
+            if (e.response) {
+              msg = e.response.data.data.error;
+            } else {
+              msg = e.message;
+            }
+            message.innerHTML = `<h4>Something goes wrong: </h4>${msg}`;
+          });
+      }
+    </script>
+  </body>
+</html>

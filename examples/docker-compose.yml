@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  clamd:
+    image: mailu/clamav:1.7
+    restart: unless-stopped
+    networks:
+      - clam-net
+  api:
+    image: benzino77/clamav-rest-api
+    restart: unless-stopped
+    depends_on:
+      - clamd
+    environment:
+      - NODE_ENV=production
+      - CLAMD_IP=clamd
+      - APP_FORM_KEY=FILES
+      - APP_PORT=3000
+    ports:
+      - '8080:3000'
+    networks:
+      - clam-net
+networks:
+  clam-net:
