@@ -30,7 +30,7 @@ or, if you are running docker in Swarm mode, you can use `configs`
 
 ```
 docker config create cra /path/to/.env
-docker service create --name clamav-rest-api --publish published=8080,target=8080 --config src=cra,target="/clamav-rest-api/.env" clamav-rest-api
+docker service create --name clamav-rest-api --publish published=8080,target=8080 --config src=cra,target="/clamav-rest-api/.env" benzino77/clamav-rest-api
 ```
 
 There is also an [example](./examples/docker-compose.yml) how to run _full_ stack on docker Swarm (clamav and clamav-rest-api combined):
@@ -160,7 +160,7 @@ X-Powered-By: Express
 
 ##### Client and server side examples
 
-Simple examples how to call `calmav-rest-api` (from client/browser side) using form action and axios library can be found in [examples/html](./examples/html) directory.
+Simple examples how to call `clamav-rest-api` (from client/browser side) using form action and axios library can be found in [examples/html](./examples/html) directory.
 
 Server side examples (Node.js) using axios, fetch and request library can be found in [examples/nodejs](./examples/nodejs) directory.
 

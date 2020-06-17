@@ -6,7 +6,7 @@ COPY src /clamav-rest-api/src/
 COPY package.json package-lock.json /clamav-rest-api/
 
 RUN cd /clamav-rest-api && \
-    npm install && \
+    npm install --production && \
     chown -R node:node /clamav-rest-api
 
 USER node:node
