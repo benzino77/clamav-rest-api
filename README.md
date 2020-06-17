@@ -160,8 +160,8 @@ X-Powered-By: Express
 
 ##### Client and server side examples
 
-Simple examples of how to call `calmac-res-api` from client side (browser) using form action and axios library can be found in `examples/html` directory.
+Simple examples how to call `calmav-rest-api` (from client/browser side) using form action and axios library can be found in [examples/html](./examples/html) directory.
 
-Server side examples (Node.js) using axios, fetch and request library can be found in `examples/nodejs` directory.
+Server side examples (Node.js) using axios, fetch and request library can be found in [examples/nodejs](./examples/nodejs) directory.
 
-There is also simple Python example using `requests` library.
+There is also simple Python [example](./examples/python) using `requests` library.
