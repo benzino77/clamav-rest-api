@@ -23,7 +23,7 @@ benzino77/clamav-rest-api
 or
 
 ```
-docker run -d -p 8080:8080 -v /local/path/to/.env:/clamav-rest/api/.env benzino77/clamav-rest-api
+docker run -d -p 8080:8080 -v /local/path/to/.env:/clamav-rest-api/.env benzino77/clamav-rest-api
 ```
 
 or, if you are running docker in Swarm mode, you can use `configs`
@@ -51,7 +51,7 @@ npm start
 ##### Configuration
 
 `clamav-rest-api` needs some information to run properly. For example it needs to know where to find ClamAV. This kind of information can be provided by `.env` file or by setting environemnt variables. Example `.env` file can be find [here](./.env.example). What you need to do is to copy `.env.example` file to `.env` and edit it to provide configuration parameters which meet your needs.
-Here is w short description of those parameters:
+Here is a short description of those parameters:
 
 - `NODE_ENV` - describe application environment (production, development, test, etc.)
 - `APP_PORT` - port number on which `clamav-rest-api` will listen to requests
