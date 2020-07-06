@@ -1,6 +1,8 @@
 #### Overview
 
-This is a simple implementation of REST API for ClamAV. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand.
+This is a simple implementation of REST API for ClamAV virus scanner. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand.
+
+![Animation](./docs/images/animation.gif)
 
 #### How to start clamav-rest-api?
 
