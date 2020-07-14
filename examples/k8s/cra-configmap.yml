@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cra-configmap
+data:
+  # property-like keys; each key maps to a simple value
+  node-env: 'production'
+  clamd-ip: 'clamavd-service'
+  app-form-key: 'FILES'

@@ -11,7 +11,19 @@ First of all you have to have running ClamAV instance configured to accept TCP c
 **_Note_:**
 You have to give `mailu/clamav` couple of minutes to start because it needs to download new signatures from ClamAV servers (update its viruses database).
 
-**_Recommended_** way of using `clamav-rest-api` is to start it as docker container (see [Configuration](#Configuration) below):
+**_Recommended_** way of using `clamav-rest-api` is to start it as docker container or on k8s cluster (see [Configuration](#Configuration) below):
+
+In [examples](./examples/k8s) directory there are kubernetes YAML files to create `configMap`, `deployments` and `services`. Just run `kubectl` command to create them in proper order:
+
+```bash
+kubectl apply -f cra-configmap.yml
+kubectl apply -f clamavd.yml
+kubectl apply -f cra.yml
+```
+
+`clamav-rest-api` service is published on `nodePort` 30080. On cluster network it is available on port 3000.
+
+To start using clamav-rest-api on docker environment follow the steps below:
 
 ```
 docker run -d -p 8080:8080 \
@@ -35,7 +47,7 @@ docker config create cra /path/to/.env
 docker service create --name clamav-rest-api --publish published=8080,target=8080 --config src=cra,target="/clamav-rest-api/.env" benzino77/clamav-rest-api
 ```
 
-There is also an [example](./examples/docker-compose.yml) how to run _full_ stack on docker Swarm (clamav and clamav-rest-api combined):
+There is also an [example](./examples/docker-compose.yml) how to run _full_ stack on docker Swarm (clamavd and clamav-rest-api combined):
 
 ```
 docker stack deploy -c docker-compose.yml cra

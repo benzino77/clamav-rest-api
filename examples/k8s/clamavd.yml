@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Unique key of the Deployment instance
+  name: clamavd-deployment
+  labels:
+    app: clamavd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clamavd
+  template:
+    metadata:
+      labels:
+        # Apply this label to pods and default
+        # the Deployment label selector to this value
+        app: clamavd
+    spec:
+      containers:
+        - name: clamavd
+          # Run this image
+          image: mailu/clamav:1.7
+          ports:
+            - containerPort: 3310
+              protocol: TCP
+              name: clamavd-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clamavd-service
+spec:
+  selector:
+    app: clamavd
+  ports:
+    - protocol: TCP
+      port: 3310
+      targetPort: 3310

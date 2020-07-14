@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Unique key of the Deployment instance
+  name: cra-deployment
+  labels:
+    app: cra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cra
+  template:
+    metadata:
+      labels:
+        # Apply this label to pods and default
+        # the Deployment label selector to this value
+        app: cra
+    spec:
+      containers:
+        - name: clamav-rest-api
+          # Run this image
+          image: benzino77/clamav-rest-api
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: cra-configmap
+                  key: node-env
+            - name: CLAMD_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: cra-configmap
+                  key: clamd-ip
+            - name: APP_FORM_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: cra-configmap
+                  key: app-form-key
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+              name: cra-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cra-service
+spec:
+  type: NodePort
+  selector:
+    app: cra
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: cra-port
+      nodePort: 30080

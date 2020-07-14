@@ -1,6 +1,6 @@
 {
   "name": "clamav-rest-api",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ClamAV REST API. Scan files using simple POST request.",
   "main": "src/app.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "virus scanwcześniej "
   ],
   "author": "Piotr Antczak",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "clamscan": "^1.3.0",
