@@ -1,6 +1,6 @@
 {
   "name": "clamav-rest-api",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "ClamAV REST API. Scan files using simple POST request.",
   "main": "src/app.js",
   "scripts": {
@@ -33,7 +33,7 @@
     "axios": "^0.19.2",
     "cross-env": "^7.0.2",
     "jest": "^26.0.1",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.3",
     "request": "^2.88.2",
     "supertest": "^4.0.2"
