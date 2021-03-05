@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   clamd:
-    image: mailu/clamav:1.7
+    image: mailu/clamav:1.8
     restart: unless-stopped
     networks:
       - clam-net

@@ -20,7 +20,7 @@ spec:
       containers:
         - name: clamavd
           # Run this image
-          image: mailu/clamav:1.7
+          image: mailu/clamav:1.8
           ports:
             - containerPort: 3310
               protocol: TCP
