@@ -29,7 +29,7 @@ To start using clamav-rest-api on docker environment follow the steps below:
 docker run -d -p 8080:8080 \
 -e NODE_ENV=production \
 -e APP_PORT=8080 \
--e APP_FORM_KEY=FILES
+-e APP_FORM_KEY=FILES \
 -e CLAMD_IP=192.168.10.10 \
 benzino77/clamav-rest-api
 ```
