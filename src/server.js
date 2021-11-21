@@ -38,7 +38,7 @@ async function makeServer(cfg) {
     });
     return srv;
   } catch (error) {
-    console.log(`Cannot initialize clamav object: ${error}`);
+    throw new Error(`Cannot initialize clamav object: ${error}`);
   }
 }
 

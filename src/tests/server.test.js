@@ -186,26 +186,16 @@ describe('Test API endpoints', () => {
 });
 
 describe('Test communication errors', () => {
-  let srv;
-  beforeEach(async () => {
+  it('should throw an error on startup that clamd is not available', async (done) => {
+    let error;
     const newConfig = Object.assign({}, config);
     newConfig.avConfig.clamdscan.port = 3311; //fake port
-    srv = await makeServer(newConfig);
-  });
-  afterEach((done) => {
-    srv.close(done);
-  });
-
-  it('should return 500 on /api/v1/version when clamd is not available', async (done) => {
-    const res = await request(srv).get('/api/v1/version');
-    expect(res.statusCode).toEqual(500);
-    done();
-  });
-  it('should return 500 on scan file when clamd is not available', async (done) => {
-    const res = await request(srv)
-      .post('/api/v1/scan')
-      .attach(`${process.env.APP_FORM_KEY}`, cleanFile01);
-    expect(res.statusCode).toEqual(500);
+    try {
+      const srv = await makeServer(newConfig);
+    } catch (e) {
+      error = e;
+    }
+    expect(error.message).toMatch(/Cannot initialize clamav object/i);
     done();
   });
 });
