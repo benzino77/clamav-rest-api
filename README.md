@@ -6,10 +6,10 @@ This is a simple implementation of REST API for ClamAV virus scanner. You can us
 
 #### How to start clamav-rest-api?
 
-First of all you have to have running ClamAV instance configured to accept TCP connections from `clamav-rest-api` instances. For more details I will guide you to CalmAV documentation ([here](https://blog.clamav.net/2016/06/regarding-use-of-clamav-daemons-tcp.html) and [here](https://www.clamav.net/documents/configuration#clamdconf)) but it's enough to say that you need `TCPSocket 3310` and eventually `TCPAddr` in your `clamd.conf` file. The easiest way is to use docker image with ClamAV already configured. I'm using `mailu/clamav` docker [image](https://hub.docker.com/r/mailu/clamav) during tests and development.
+First of all you have to have running ClamAV instance configured to accept TCP connections from `clamav-rest-api` instances. For more details I will guide you to CalmAV documentation ([here](https://blog.clamav.net/2016/06/regarding-use-of-clamav-daemons-tcp.html) and [here](https://www.clamav.net/documents/configuration#clamdconf)) but it's enough to say that you need `TCPSocket 3310` and eventually `TCPAddr` in your `clamd.conf` file. The easiest way is to use docker image with ClamAV already configured. I'm using `clamav/clamav` docker [image](https://hub.docker.com/r/clamav/clamav) during tests and development.
 
 **_Note_:**
-You have to give `mailu/clamav` couple of minutes to start because it needs to download new signatures from ClamAV servers (update its viruses database).
+You have to give `clamav/clamav` a minute to start because it needs to refresh signatures from ClamAV servers (update its viruses database).
 
 **_Recommended_** way of using `clamav-rest-api` is to start it as docker container or on k8s cluster (see [Configuration](#Configuration) below):
 
