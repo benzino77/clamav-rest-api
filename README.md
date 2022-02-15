@@ -73,9 +73,10 @@ Here is a short description of those parameters:
 - `APP_MORGAN_LOG_FORMAT` - log format used by `clamav-rest-api` to display information about requests. More infor can be found [here](https://github.com/expressjs/morgan#predefined-formats)
 - `APP_MAX_FILE_SIZE` - max size (in bytes) of **single** file which will be accepted by `clamav-rest-api`. You have to also take care of `MaxScanSize`, `MaxFileSize`, etc. in your `clamd.conf` file.
 - `APP_MAX_FILES_NUMBER` - maximum number of files uploaded to scan
-- `CLAMD_IP` - ClamAV IP adress
-- `CLAMD_PORT` - ClamAV listen port
-- `CLAMD_TIMEOUT`- ClamAV timeout connection in miliseconds
+- `CLAMD_IP` - ClamAV IP adress (default: 127.0.0.1)
+- `CLAMD_PORT` - ClamAV listen port (default: 3310)
+- `CLAMD_TIMEOUT`- ClamAV timeout connection in miliseconds (default: 60000)
+- `STARTUP_RETRY`- Amount of times the API will attempt to connect to Clam before terminating (default: 30)
 
 As stated before you can set all those parameters by setting environment variables:
 
