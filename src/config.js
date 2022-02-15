@@ -5,6 +5,7 @@ const avConfig = {
     host: process.env.CLAMD_IP || '127.0.0.1',
     port: process.env.CLAMD_PORT || 3310,
     timeout: parseInt(process.env.CLAMD_TIMEOUT || 60000),
+    startupRetry: parseInt(process.env.STARTUP_RETRY || 30),
     socket: null,
     active: true,
   },
@@ -24,9 +25,8 @@ const fuConfig = {
       JSON.stringify({
         success: false,
         data: {
-          error: `File size limit exceeded. Max size of uploaded file is: ${
-            process.env.APP_MAX_FILE_SIZE / 1024
-          } KB`,
+          error: `File size limit exceeded. Max size of uploaded file is: ${process.env.APP_MAX_FILE_SIZE / 1024
+            } KB`,
         },
       })
     );
