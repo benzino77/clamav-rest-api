@@ -25,8 +25,9 @@ const fuConfig = {
       JSON.stringify({
         success: false,
         data: {
-          error: `File size limit exceeded. Max size of uploaded file is: ${process.env.APP_MAX_FILE_SIZE / 1024
-            } KB`,
+          error: `File size limit exceeded. Max size of uploaded file is: ${
+            process.env.APP_MAX_FILE_SIZE / 1024
+          } KB`,
         },
       })
     );
