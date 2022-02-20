@@ -1,13 +1,18 @@
 version: '3.8'
 services:
   clamd:
-    image: clamav/clamav:0.104.1
+    image: clamav/clamav:0.104
     restart: unless-stopped
     networks:
       - clam-net
   api:
     image: benzino77/clamav-rest-api
     restart: unless-stopped
+    # depends_on is ignored in some situations (have a look at the discussion in this PR: https://github.com/benzino77/clamav-rest-api/pull/23)
+    # to fix such situation there is wait-for-it script available inside the CRA docker image (https://github.com/vishnubob/wait-for-it)
+    # so to wait for clamd to be available, one could ovewrite the CMD with wait-for-it script
+    # UNCOMMENT following line to check if clamav is available on host clamd and port 3310, set timeout to 60 seconds
+    # command: ['/usr/bin/wait-for-it', '-h', 'clamd', '-p', '3310', '-s', '-t', '60', '--', 'npm', 'start']
     depends_on:
       - clamd
     environment:
