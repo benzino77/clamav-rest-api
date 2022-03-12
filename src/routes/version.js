@@ -28,7 +28,7 @@ const router = express.Router();
 router.route('/').get(async (req, res, next) => {
   const av = req._av;
   try {
-    const vers = await av.get_version();
+    const vers = await av.getVersion();
     res.json({
       success: true,
       data: {
