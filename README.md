@@ -97,11 +97,13 @@ APP_PORT=8080 NODE_ENV=production CLAMD_IP=clamavd CLAMD_IP=localhost APP_FORM_K
 
 #### API endpoints
 
-There are only two API endpoints:
+There are couple API endpoints:
 
 `POST /api/v1/scan` - to scan files (see [examples](#Examples))
 
 `GET /api/v1/version` - to get ClamAV version
+
+`GET /api/v1/dbsignatures` - to get local (currently used by CRA) and remote (obtained from clamav.net) virus database signatures. It can be usefull to check whether the local database is up-to-date.
 
 #### Examples
 
