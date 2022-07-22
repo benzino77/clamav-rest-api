@@ -2,6 +2,9 @@ const request = require('supertest');
 const _ = require('lodash');
 const { makeServer } = require('../server');
 const config = require('../config');
+const dns = require('dns');
+
+jest.mock('dns');
 
 const cleanFile01 = 'src/tests/1Mfile01.rnd';
 const cleanFile02 = 'src/tests/1Mfile02.rnd';
@@ -95,6 +98,20 @@ describe('Test return codes', () => {
     expect(res.body.data).toHaveProperty('error');
     done();
   });
+  it('should return 500 and proper error message on DNS query failure', async (done) => {
+    const mockErrorMessage = 'This is error';
+    dns.resolveTxt.mockImplementation((hostname, cb) => {
+      cb(mockErrorMessage, []);
+    });
+    const res = await request(srv).get('/api/v1/dbsignatures');
+    expect(res.statusCode).toEqual(500);
+    expect(res.body).toHaveProperty('success');
+    expect(res.body.success).toBe(false);
+    expect(res.body).toHaveProperty('data');
+    expect(res.body.data).toHaveProperty('error');
+    expect(res.body.data.error).toEqual(mockErrorMessage);
+    done();
+  });
 });
 describe('Test API endpoints', () => {
   let srv;
@@ -181,6 +198,24 @@ describe('Test API endpoints', () => {
     expect(_.isEmpty(res.body.data.result[1].viruses)).toBe(true);
     expect(res.body.data.result[0].is_infected).toBe(true);
     expect(res.body.data.result[1].is_infected).toBe(false);
+    done();
+  });
+  it('Should return signature numbers', async (done) => {
+    const mockRemoteSignatureValue = '33333';
+    dns.resolveTxt.mockImplementation((hostname, cb) => {
+      cb('', [
+        [`0.103.6:62:${mockRemoteSignatureValue}:1658383200:1:90:49192:333`],
+      ]);
+    });
+    const res = await request(srv).get('/api/v1/dbsignatures');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty('success');
+    expect(res.body.success).toBe(true);
+    expect(res.body).toHaveProperty('data');
+    expect(res.body.data).toHaveProperty('remote_clamav_db_signature');
+    expect(res.body.data.remote_clamav_db_signature).toEqual(
+      mockRemoteSignatureValue
+    );
     done();
   });
 });
