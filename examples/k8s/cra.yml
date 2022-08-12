@@ -37,6 +37,11 @@ spec:
                 configMapKeyRef:
                   name: cra-configmap
                   key: app-form-key
+            - name: APP_MAX_FILE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: cra-configmap
+                  key: app-max-file-size
           ports:
             - containerPort: 3000
               protocol: TCP

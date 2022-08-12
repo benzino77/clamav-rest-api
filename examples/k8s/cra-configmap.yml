@@ -7,3 +7,4 @@ data:
   node-env: 'production'
   clamd-ip: 'clamavd-service'
   app-form-key: 'FILES'
+  app-max-file-size: '10485760'
