@@ -1,5 +1,5 @@
 const avConfig = {
-  debug_mode: false,
+  debugMode: false,
   preference: 'clamdscan',
   clamdscan: {
     host: process.env.CLAMD_IP || '127.0.0.1',
@@ -24,9 +24,7 @@ const fuConfig = {
       JSON.stringify({
         success: false,
         data: {
-          error: `File size limit exceeded. Max size of uploaded file is: ${
-            process.env.APP_MAX_FILE_SIZE / 1024
-          } KB`,
+          error: `File size limit exceeded. Max size of uploaded file is: ${process.env.APP_MAX_FILE_SIZE / 1024} KB`,
         },
       })
     );
