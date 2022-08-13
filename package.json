@@ -33,7 +33,7 @@
   "devDependencies": {
     "cross-env": "^7.0.2",
     "jest": "^26.0.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "nodemon": "^2.0.3",
     "request": "^2.88.2",
     "supertest": "^4.0.2"
