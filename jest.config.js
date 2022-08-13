@@ -14,4 +14,5 @@ module.exports = {
     '!**/serviceWorker.js',
     '!**/index.js',
   ],
+  roots: ['<rootDir>/src/tests/'],
 };
