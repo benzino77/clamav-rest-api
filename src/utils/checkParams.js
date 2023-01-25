@@ -13,7 +13,7 @@ const checkParams = (req) => {
     return noFilesError;
   }
 
-  const hasProperKey = req.files.hasOwnProperty(process.env.APP_FORM_KEY);
+  const hasProperKey = Object.getOwnPropertyNames(req.files).includes(process.env.APP_FORM_KEY);
   if (!hasProperKey || passedFilesLength > 1) {
     return invalidFormKeyError;
   }
