@@ -20,6 +20,7 @@ services:
       - CLAMD_IP=clamd
       - APP_FORM_KEY=FILES
       - APP_PORT=3000
+      - APP_MAX_FILE_SIZE=26214400
     ports:
       - '8080:3000'
     networks:
