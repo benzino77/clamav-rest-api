@@ -1,4 +1,4 @@
-FROM node:12.16.3-buster-slim
+FROM node:19.8.1-buster-slim
 
 LABEL maintainer="Piotr Antczak <antczak.piotr@gmail.com>"
 WORKDIR /clamav-rest-api
