@@ -31,6 +31,7 @@ docker run -d -p 8080:8080 \
 -e APP_PORT=8080 \
 -e APP_FORM_KEY=FILES \
 -e CLAMD_IP=192.168.10.10 \
+-e APP_MAX_FILE_SIZE=26214400 \
 benzino77/clamav-rest-api
 ```
 
