@@ -18,9 +18,6 @@ describe('Test "scan" API endpoint', () => {
   let srv;
   beforeEach(async () => {
     srv = await makeServer(config);
-    NodeClam.mockScanStream.mockClear();
-    NodeClam.__setScanResultInfected(false);
-    NodeClam.__setScanStreamReject(false);
   });
 
   afterEach((done) => {
