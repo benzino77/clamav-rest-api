@@ -1,6 +1,7 @@
 const request = require('supertest');
 const { makeServer } = require('../server');
 const config = require('../config');
+const { PassThrough } = require('stream');
 
 const cleanFile01 = 'src/tests/1Mfile01.rnd';
 const cleanFile02 = 'src/tests/1Mfile02.rnd';
@@ -10,15 +11,13 @@ const bigFile = 'src/tests/3Mfile.rnd';
 const infectedFile = 'src/tests/eicar_com.zip';
 
 const NodeClam = require('clamscan');
+const { rejectErrorMessage } = require('./__mocks__/clamscan');
 jest.mock('clamscan');
 
 describe('Test "scan" API endpoint', () => {
   let srv;
   beforeEach(async () => {
     srv = await makeServer(config);
-    NodeClam.mockScanStream.mockClear();
-    NodeClam.__setScanResultInfected(false);
-    NodeClam.__setScanStreamReject(false);
   });
 
   afterEach((done) => {
@@ -84,9 +83,23 @@ describe('Test "scan" API endpoint', () => {
   });
 
   it('should return 500 on clamd error', async (done) => {
-    NodeClam.__setScanStreamReject(true);
+    const mockedStream = new PassThrough();
+    NodeClam.__setMockedStream(mockedStream);
+    setTimeout(() => mockedStream.emit('error', new Error(rejectErrorMessage)), 100);
     const res = await request(srv).post('/api/v1/scan').attach(`${process.env.APP_FORM_KEY}`, cleanFile01);
-    expect(NodeClam.mockScanStream).toHaveBeenCalledTimes(1);
+    expect(res.statusCode).toEqual(500);
+    expect(res.body).toHaveProperty('success');
+    expect(res.body.success).toBe(false);
+    expect(res.body).toHaveProperty('data');
+    expect(res.body.data).toHaveProperty('error');
+    done();
+  });
+
+  it('should return 500 on clamd timeout', async (done) => {
+    const mockedStream = new PassThrough();
+    NodeClam.__setMockedStream(mockedStream);
+    setTimeout(() => mockedStream.emit('timeout', new Error(rejectErrorMessage)), 100);
+    const res = await request(srv).post('/api/v1/scan').attach(`${process.env.APP_FORM_KEY}`, cleanFile01);
     expect(res.statusCode).toEqual(500);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(false);
@@ -96,8 +109,10 @@ describe('Test "scan" API endpoint', () => {
   });
 
   it('should report is_infected=false on scan one clean file', async (done) => {
+    const mockedStream = new PassThrough();
+    NodeClam.__setMockedStream(mockedStream);
+    setTimeout(() => mockedStream.emit('scan-complete', { isInfected: false, viruses: [] }), 100);
     const res = await request(srv).post('/api/v1/scan').attach(`${process.env.APP_FORM_KEY}`, cleanFile01);
-    expect(NodeClam.mockScanStream).toHaveBeenCalledTimes(1);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(true);
@@ -111,11 +126,21 @@ describe('Test "scan" API endpoint', () => {
   });
 
   it('should report is_infected=false on scan two clean files', async (done) => {
+    const mockedStream = new PassThrough();
+    NodeClam.__setMockedStream(mockedStream);
+    setTimeout(() => {
+      mockedStream.emit('scan-complete', { isInfected: false, viruses: [] });
+      mockedStream.resume();
+    }, 100);
+
+    setTimeout(() => {
+      mockedStream.emit('scan-complete', { isInfected: false, viruses: [] });
+    }, 150);
+
     const res = await request(srv)
       .post('/api/v1/scan')
       .attach(`${process.env.APP_FORM_KEY}`, cleanFile01)
       .attach(`${process.env.APP_FORM_KEY}`, cleanFile02);
-    expect(NodeClam.mockScanStream).toHaveBeenCalledTimes(2);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(true);
@@ -132,9 +157,10 @@ describe('Test "scan" API endpoint', () => {
   });
 
   it('should report is_infected=true on scan one infected file', async (done) => {
-    NodeClam.__setScanResultInfected(true);
+    const mockedStream = new PassThrough();
+    NodeClam.__setMockedStream(mockedStream);
+    setTimeout(() => mockedStream.emit('scan-complete', { isInfected: true, viruses: ['bad_virus'] }), 100);
     const res = await request(srv).post('/api/v1/scan').attach(`${process.env.APP_FORM_KEY}`, infectedFile);
-    expect(NodeClam.mockScanStream).toHaveBeenCalledTimes(1);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(true);
@@ -148,14 +174,21 @@ describe('Test "scan" API endpoint', () => {
   });
 
   it('should report is_infected=true and is_infected=false on scan infected and clean file', async (done) => {
-    NodeClam.mockScanStream
-      .mockReturnValueOnce(Promise.resolve({ isInfected: true, viruses: ['bad_virus'] }))
-      .mockReturnValueOnce(Promise.resolve({ isInfected: false, viruses: [] }));
+    const mockedStream = new PassThrough();
+    NodeClam.__setMockedStream(mockedStream);
+    setTimeout(() => {
+      mockedStream.emit('scan-complete', { isInfected: true, viruses: ['bad_virus'] });
+      mockedStream.resume();
+    }, 100);
+
+    setTimeout(() => {
+      mockedStream.emit('scan-complete', { isInfected: false, viruses: [] });
+    }, 150);
+
     const res = await request(srv)
       .post('/api/v1/scan')
       .attach(`${process.env.APP_FORM_KEY}`, infectedFile)
       .attach(`${process.env.APP_FORM_KEY}`, cleanFile01);
-    expect(NodeClam.mockScanStream).toHaveBeenCalledTimes(2);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(true);
