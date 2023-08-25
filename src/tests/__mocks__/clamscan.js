@@ -2,6 +2,7 @@ let initReject = false;
 let getVersionReject = false;
 let scanStreamReject = false;
 let scanResultInfected = false;
+let mockedStream;
 
 const rejectErrorMessage = 'Reject error';
 
@@ -21,6 +22,10 @@ function __setScanResultInfected(infected) {
   scanResultInfected = infected;
 }
 
+function __setMockedStream(stream) {
+  mockedStream = stream;
+}
+
 const mockGetVersion = jest.fn().mockImplementation(() => {
   if (getVersionReject) {
     return Promise.reject(rejectErrorMessage);
@@ -36,6 +41,10 @@ const mockScanStream = jest.fn().mockImplementation(() => {
   return Promise.resolve({ isInfected: scanResultInfected, viruses: scanResultInfected ? ['bad_virus'] : [] });
 });
 
+const mockPassThrough = jest.fn().mockImplementation(() => {
+  return mockedStream;
+});
+
 const mockInit = jest.fn().mockImplementation(() => {
   if (initReject) {
     return Promise.reject(rejectErrorMessage);
@@ -43,6 +52,7 @@ const mockInit = jest.fn().mockImplementation(() => {
   return Promise.resolve({
     getVersion: mockGetVersion,
     scanStream: mockScanStream,
+    passthrough: mockPassThrough,
   });
 });
 
@@ -54,9 +64,11 @@ mock.__setInitReject = __setInitReject;
 mock.__setGetVersionReject = __setGetVersionReject;
 mock.__setScanStreamReject = __setScanStreamReject;
 mock.__setScanResultInfected = __setScanResultInfected;
+mock.__setMockedStream = __setMockedStream;
 
 module.exports = mock;
 module.exports.mockGetVersion = mockGetVersion;
 module.exports.mockScanStream = mockScanStream;
+module.exports.mockPassThrough = mockPassThrough;
 module.exports.mockInit = mockInit;
 module.exports.rejectErrorMessage = rejectErrorMessage;

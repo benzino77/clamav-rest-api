@@ -6,7 +6,7 @@ const scanFile = async (upload, av) => {
       name: upload.name,
       is_infected: false,
       viruses: [],
-    }
+    };
   }
   let chunk = new Buffer.from(upload.data);
 
@@ -14,16 +14,23 @@ const scanFile = async (upload, av) => {
   fileStream._read = () => {
     fileStream.push(chunk);
     chunk = null;
-  }
+  };
 
   const tcpStream = av.passthrough();
   fileStream.pipe(tcpStream);
 
-  const result = await new Promise(resolve => tcpStream.on("scan-complete", resolve).on("error", (error) => {
-    throw new Error(error);
-  }).on("timeout", (error) => {
-    throw new Error(error);
-  }));
+  const result = await new Promise((resolve, reject) =>
+    tcpStream
+      .on('scan-complete', (data) => {
+        resolve(data);
+      })
+      .on('error', (error) => {
+        reject(error);
+      })
+      .on('timeout', (error) => {
+        reject(error);
+      })
+  );
 
   return {
     name: upload.name,
