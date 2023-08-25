@@ -8,7 +8,7 @@ COPY package.json package-lock.json ./
 
 RUN  apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y apt-utils wait-for-it && \
-    npm install --production && \
+    npm ci --production && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     chown -R node:node ./
