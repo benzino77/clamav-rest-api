@@ -7,6 +7,7 @@ const fileUpload = require('express-fileupload');
 
 const versionRouter = require('./routes/version');
 const scanRouter = require('./routes/scan');
+const scan2Router = require('./routes/scan2');
 const dbSignaturesRouter = require('./routes/dbsignatures');
 
 async function makeServer(cfg) {
@@ -29,6 +30,7 @@ async function makeServer(cfg) {
       app.use(morgan(process.env.APP_MORGAN_LOG_FORMAT || 'combined'));
     app.use('/api/v1/version', versionRouter);
     app.use('/api/v1/scan', scanRouter);
+    app.use('/api/v1/scan2', scan2Router);
     app.use('/api/v1/dbsignatures', dbSignaturesRouter);
     app.all('*', (req, res, next) => {
       res.status(405).json({ success: false, data: { error: 'Not allowed.' } });
