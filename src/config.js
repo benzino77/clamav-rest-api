@@ -16,6 +16,7 @@ const fuConfig = {
   limits: {
     fileSize: parseInt(process.env.APP_MAX_FILE_SIZE || DEFAULT_MAX_FILE_SIZE),
   },
+  abortOnLimit: true,
   limitHandler: (req, res) => {
     res.writeHead(413, {
       Connection: 'close',
