@@ -1,6 +1,6 @@
 {
   "name": "clamav-rest-api",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "ClamAV REST API. Scan files using simple POST request.",
   "main": "src/app.js",
   "engines": {
@@ -27,7 +27,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "express-fileupload": "1.4.0",
+    "express-fileupload": "^1.4.3",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
