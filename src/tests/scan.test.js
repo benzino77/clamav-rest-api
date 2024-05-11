@@ -24,27 +24,25 @@ describe('Test "scan" API endpoint', () => {
     srv.close(done);
   });
 
-  it('should return 400 on scan without file', async (done) => {
+  it('should return 400 on scan without file', async () => {
     const res = await request(srv).post('/api/v1/scan');
     expect(res.statusCode).toEqual(400);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 400 on wrong form key', async (done) => {
+  it('should return 400 on wrong form key', async () => {
     const res = await request(srv).post('/api/v1/scan').attach(`__${process.env.APP_FORM_KEY}`, cleanFile01);
     expect(res.statusCode).toEqual(400);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 400 on more than one form key', async (done) => {
+  it('should return 400 on more than one form key', async () => {
     const res = await request(srv)
       .post('/api/v1/scan')
       .attach(`__${process.env.APP_FORM_KEY}`, cleanFile01)
@@ -54,20 +52,18 @@ describe('Test "scan" API endpoint', () => {
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 413 on scan too big file', async (done) => {
+  it('should return 413 on scan too big file', async () => {
     const res = await request(srv).post('/api/v1/scan').attach(`${process.env.APP_FORM_KEY}`, bigFile);
     expect(res.statusCode).toEqual(413);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 400 on upload too much files', async (done) => {
+  it('should return 400 on upload too much files', async () => {
     const res = await request(srv)
       .post('/api/v1/scan')
       .attach(`${process.env.APP_FORM_KEY}`, cleanFile01)
@@ -79,10 +75,9 @@ describe('Test "scan" API endpoint', () => {
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 500 on clamd error', async (done) => {
+  it('should return 500 on clamd error', async () => {
     const mockedStream = new PassThrough();
     NodeClam.__setMockedStream(mockedStream);
     setTimeout(() => mockedStream.emit('error', new Error(rejectErrorMessage)), 100);
@@ -92,10 +87,9 @@ describe('Test "scan" API endpoint', () => {
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 500 on clamd timeout', async (done) => {
+  it('should return 500 on clamd timeout', async () => {
     const mockedStream = new PassThrough();
     NodeClam.__setMockedStream(mockedStream);
     setTimeout(() => mockedStream.emit('timeout', new Error(rejectErrorMessage)), 100);
@@ -105,10 +99,9 @@ describe('Test "scan" API endpoint', () => {
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should report is_infected=false on scan one clean file', async (done) => {
+  it('should report is_infected=false on scan one clean file', async () => {
     const mockedStream = new PassThrough();
     NodeClam.__setMockedStream(mockedStream);
     setTimeout(() => mockedStream.emit('scan-complete', { isInfected: false, viruses: [] }), 100);
@@ -122,10 +115,9 @@ describe('Test "scan" API endpoint', () => {
     expect(Array.isArray(res.body.data.result[0].viruses)).toBe(true);
     expect(res.body.data.result[0].viruses.length).toBe(0);
     expect(res.body.data.result[0].is_infected).toBe(false);
-    done();
   });
 
-  it('should report is_infected=false on scan two clean files', async (done) => {
+  it('should report is_infected=false on scan two clean files', async () => {
     const mockedStream = new PassThrough();
     NodeClam.__setMockedStream(mockedStream);
     setTimeout(() => {
@@ -153,10 +145,9 @@ describe('Test "scan" API endpoint', () => {
     expect(res.body.data.result[1].viruses.length).toBe(0);
     expect(res.body.data.result[0].is_infected).toBe(false);
     expect(res.body.data.result[1].is_infected).toBe(false);
-    done();
   });
 
-  it('should report is_infected=true on scan one infected file', async (done) => {
+  it('should report is_infected=true on scan one infected file', async () => {
     const mockedStream = new PassThrough();
     NodeClam.__setMockedStream(mockedStream);
     setTimeout(() => mockedStream.emit('scan-complete', { isInfected: true, viruses: ['bad_virus'] }), 100);
@@ -170,10 +161,9 @@ describe('Test "scan" API endpoint', () => {
     expect(Array.isArray(res.body.data.result[0].viruses)).toBe(true);
     expect(res.body.data.result[0].viruses.length).toBe(1);
     expect(res.body.data.result[0].is_infected).toBe(true);
-    done();
   });
 
-  it('should report is_infected=true and is_infected=false on scan infected and clean file', async (done) => {
+  it('should report is_infected=true and is_infected=false on scan infected and clean file', async () => {
     const mockedStream = new PassThrough();
     NodeClam.__setMockedStream(mockedStream);
     setTimeout(() => {
@@ -201,6 +191,5 @@ describe('Test "scan" API endpoint', () => {
     expect(res.body.data.result[1].viruses.length).toBe(0);
     expect(res.body.data.result[0].is_infected).toBe(true);
     expect(res.body.data.result[1].is_infected).toBe(false);
-    done();
   });
 });

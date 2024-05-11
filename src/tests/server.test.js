@@ -17,29 +17,27 @@ describe('Test server behavior', () => {
     srv.close(done);
   });
 
-  it('should return 405 on post to non existing endpoit', async (done) => {
+  it('should return 405 on post to non existing endpoit', async () => {
     const res = await request(srv).post('/api/v1/bleble');
     expect(res.statusCode).toEqual(405);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 
-  it('should return 405 when using not allowed HTTP method', async (done) => {
+  it('should return 405 when using not allowed HTTP method', async () => {
     const res = await request(srv).post('/api/v1/version');
     expect(res.statusCode).toEqual(405);
     expect(res.body).toHaveProperty('success');
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
-    done();
   });
 });
 
 describe('Test clamd communication problem', () => {
-  it('should throw an error on startup that clamd is not available', async (done) => {
+  it('should throw an error on startup that clamd is not available', async () => {
     NodeClam.__setInitReject(true);
     try {
       const srv = await makeServer(config);
@@ -48,6 +46,5 @@ describe('Test clamd communication problem', () => {
     }
     expect(NodeClam.mockInit).toHaveBeenCalledTimes(1);
     expect(error.message).toMatch(/Cannot initialize clamav object/i);
-    done();
   });
 });

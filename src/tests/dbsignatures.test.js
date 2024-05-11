@@ -21,7 +21,7 @@ describe('Test "dbsignatures" API endpoint', () => {
     srv.close(done);
   });
 
-  it('should return 500 and proper error message on DNS query failure', async (done) => {
+  it('should return 500 and proper error message on DNS query failure', async () => {
     const mockErrorMessage = 'This is error';
     dns.resolveTxt.mockImplementation((hostname, cb) => {
       cb(mockErrorMessage, []);
@@ -33,10 +33,9 @@ describe('Test "dbsignatures" API endpoint', () => {
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
     expect(res.body.data.error).toEqual(mockErrorMessage);
-    done();
   });
 
-  it('should return 500 on clamd error', async (done) => {
+  it('should return 500 on clamd error', async () => {
     const mockRemoteSignatureValue = '33333';
     dns.resolveTxt.mockImplementation((hostname, cb) => {
       cb('', [[`0.103.6:62:${mockRemoteSignatureValue}:1658383200:1:90:49192:333`]]);
@@ -51,10 +50,9 @@ describe('Test "dbsignatures" API endpoint', () => {
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('error');
     expect(res.body.data.error).toEqual(NodeClam.rejectErrorMessage);
-    done();
   });
 
-  it('Should return signature numbers', async (done) => {
+  it('Should return signature numbers', async () => {
     const mockRemoteSignatureValue = '33333';
     dns.resolveTxt.mockImplementation((hostname, cb) => {
       cb('', [[`0.103.6:62:${mockRemoteSignatureValue}:1658383200:1:90:49192:333`]]);
@@ -66,6 +64,5 @@ describe('Test "dbsignatures" API endpoint', () => {
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('remote_clamav_db_signature');
     expect(res.body.data.remote_clamav_db_signature).toEqual(mockRemoteSignatureValue);
-    done();
   });
 });

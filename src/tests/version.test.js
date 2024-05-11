@@ -17,7 +17,7 @@ describe('Test "version" API endpoint', () => {
     srv.close(done);
   });
 
-  it('should return 500 on clamd error', async (done) => {
+  it('should return 500 on clamd error', async () => {
     NodeClam.__setGetVersionReject(true);
     const res = await request(srv).get('/api/v1/version');
     expect(NodeClam.mockGetVersion).toHaveBeenCalledTimes(1);
@@ -26,10 +26,9 @@ describe('Test "version" API endpoint', () => {
     expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data.error).toBe(NodeClam.rejectErrorMessage);
-    done();
   });
 
-  it('should return ClamAV version', async (done) => {
+  it('should return ClamAV version', async () => {
     const res = await request(srv).get('/api/v1/version');
     expect(NodeClam.mockGetVersion).toHaveBeenCalledTimes(1);
     expect(res.statusCode).toEqual(200);
@@ -37,6 +36,5 @@ describe('Test "version" API endpoint', () => {
     expect(res.body.success).toBe(true);
     expect(res.body).toHaveProperty('data');
     expect(res.body.data.version).toMatch(/^ClamAV \d+\.\d+\.\d+\/\d+\//);
-    done();
   });
 });
