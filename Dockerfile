@@ -13,5 +13,6 @@ RUN  apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     chown -R node:node ./
 
+EXPOSE 8080
 USER node:node
 CMD ["npm", "start"]
