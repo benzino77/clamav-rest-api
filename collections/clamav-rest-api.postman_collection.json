@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "e5385fde-efa5-41b3-b793-0c2248b0ae06",
+		"name": "clamav-rest-api",
+		"description": "[https://github.com/benzino77/clamav-rest-api](https://github.com/benzino77/clamav-rest-api#Examples)\n\ncollection created by GangGreenTemperTatum (https://github.com/GangGreenTemperTatum)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21448743"
+	},
+	"item": [
+		{
+			"name": "POST Scan File",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "FILES",
+							"type": "file",
+							"src": "src/tests/1Mfile01.rnd"
+						},
+						{
+							"key": "FILES",
+							"type": "file",
+							"src": "src/tests/eicar_com.zip"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{clamav-rest-api-port}}/api/v1/scan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{clamav-rest-api-port}}",
+					"path": [
+						"api",
+						"v1",
+						"scan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET DB Signature Version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:{{clamav-rest-api-port}}/api/v1/dbsignatures",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{clamav-rest-api-port}}",
+					"path": [
+						"api",
+						"v1",
+						"dbsignatures"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ClamAV Version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:{{clamav-rest-api-port}}/api/v1/version",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{clamav-rest-api-port}}",
+					"path": [
+						"api",
+						"v1",
+						"version"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "clamav-rest-api-port",
+			"value": "3000"
+		}
+	]
+}
