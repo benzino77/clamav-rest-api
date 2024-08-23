@@ -125,3 +125,4 @@ coverage/
 
 # development .env file
 .env
+.vscode/
