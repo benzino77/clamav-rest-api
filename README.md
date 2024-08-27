@@ -65,7 +65,7 @@ npm start
 
 ##### Configuration
 
-`clamav-rest-api` needs some information to run properly. For example it needs to know where to find ClamAV. This kind of information can be provided by `.env` file or by setting environment variables. Example `.env` file can be find [here](./.env.example). What you need to do is to copy `.env.example` file to `.env` and edit it to provide configuration parameters which meet your needs.
+`clamav-rest-api` needs some information to run properly. For example it needs to know where to find ClamAV. This kind of information can be provided by `.env` file or by setting environemnt variables. Example `.env` file can be find [here](./.env.example). What you need to do is to copy `.env.example` file to `.env` and edit it to provide configuration parameters which meet your needs.
 Here is a short description of those parameters:
 
 - `NODE_ENV` - describe application environment (production, development, test, etc.)
@@ -74,9 +74,9 @@ Here is a short description of those parameters:
 - `APP_MORGAN_LOG_FORMAT` - log format used by `clamav-rest-api` to display information about requests. More infor can be found [here](https://github.com/expressjs/morgan#predefined-formats)
 - `APP_MAX_FILE_SIZE` - max size (in bytes) of **single** file which will be accepted by `clamav-rest-api`. You have to also take care of `MaxScanSize`, `MaxFileSize`, etc. in your `clamd.conf` file.
 - `APP_MAX_FILES_NUMBER` - maximum number of files uploaded to scan
-- `CLAMD_IP` - ClamAV IP address
+- `CLAMD_IP` - ClamAV IP adress
 - `CLAMD_PORT` - ClamAV listen port
-- `CLAMD_TIMEOUT`- ClamAV timeout connection in milliseconds
+- `CLAMD_TIMEOUT`- ClamAV timeout connection in miliseconds
 
 As stated before you can set all those parameters by setting environment variables:
 
