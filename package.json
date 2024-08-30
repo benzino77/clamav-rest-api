@@ -4,7 +4,7 @@
   "description": "ClamAV REST API. Scan files using simple POST request.",
   "main": "src/app.js",
   "engines": {
-    "node": ">=18.0.0 <19"
+    "node": ">=18.0.0 <22"
   },
   "scripts": {
     "startdev": "nodemon src/app.js",
