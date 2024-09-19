@@ -1,6 +1,6 @@
 {
   "name": "clamav-rest-api",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "ClamAV REST API. Scan files using simple POST request.",
   "main": "src/app.js",
   "engines": {
@@ -36,7 +36,6 @@
     "jest": "29.7.0",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.3",
-    "request": "^2.88.2",
     "supertest": "6.3.4"
   }
 }
