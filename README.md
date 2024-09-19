@@ -1,8 +1,16 @@
 #### Overview
 
-This is a simple implementation of REST API for ClamAV virus scanner. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand.
+This is a simple implementation of REST API for ClamAV virus scanner. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand. Because _clamav-rest-api_ is running locally, you do not need to pass your files to third party entities.
 
-![Animation](./docs/images/animation.gif)
+![Screencast](./docs/video/screencast.webm)
+
+The screen recording above is showing how to use _clamav-rest-api_ synchronously and asynchronously <sup>[1](#notes)</sup>. For async call there are three possible paths available:
+
+- _webhook call_: call external API endpoint when scan is completed
+- _redis pub/sub_: publish scan result to a given _REDIS_ channel
+- _AWS SNS_: publish scan result to a given _SNS Topic_
+
+In all three cases the message body is the `JSON` containing scan result and `request_id`.
 
 #### How to start clamav-rest-api?
 
@@ -77,6 +85,10 @@ Here is a short description of those parameters:
 - `CLAMD_IP` - ClamAV IP address
 - `CLAMD_PORT` - ClamAV listen port
 - `CLAMD_TIMEOUT`- ClamAV timeout connection in milliseconds
+- `STATS_COLLECT` - `true` or `false` indicating whether stats about scanning should be collected <sup>[1](#notes)</sup>
+  - `STATS_REDIS` - address of the _REDIS_ server for collecting statistics: `redis[s]://[host][:port]`.
+  - `STATS_REDIS_INSECURE` - `true` or `false` indicates whether to check remote server SSL certificate
+  - `STATS_REDIS_AUTH` - _REDIS_ server credentials passed as `JSON`: `{"username":"user_name","password":"user_password"}`
 
 As stated before you can set all those parameters by setting environment variables:
 
@@ -102,9 +114,20 @@ There are couple API endpoints:
 
 `POST /api/v1/scan` - to scan files (see [examples](#Examples))
 
+`POST /api/v1/asyncscan` - to scan files asynchronously <sup>[1](#notes)</sup>
+
 `GET /api/v1/version` - to get ClamAV version
 
-`GET /api/v1/dbsignatures` - to get local (currently used by CRA) and remote (obtained from clamav.net) virus database signatures. It can be usefull to check whether the local database is up-to-date.
+`GET /api/v1/dbsignatures` - to get local (currently used by CRA) and remote (obtained from clamav.net) virus database signatures. It can be useful to check whether the local database is up-to-date.
+
+`GET /api/v1/stats` - endpoint which provides information about the number of scanned files, number of infected files and a list of founded viruses. Stats are stored in _REDIS_ <sup>[1](#notes)</sup>.
+
+#### Notes
+
+> [!IMPORTANT]
+> The asynchronous scanning and statistics reports are not included neither in this repository nor `benzino77/clamav-rest-api` docker image
+
+If you are interested in the asynchronous scanning or statistics reports drop me a message at antczak.piotr[@_@]gmail.com with your proposition.
 
 #### Examples
 
