@@ -5,13 +5,13 @@ This is a simple implementation of REST API for ClamAV virus scanner. You can us
 <video src="https://github.com/user-attachments/assets/54be5afc-776a-4b02-93ac-e010005e1b79">Screencast
 </video>
 
-The screen recording above is showing how to use _clamav-rest-api_ synchronously and asynchronously <sup>[1](#notes)</sup>. For async call there are three possible paths available:
+The screen recording above is showing how to use _clamav-rest-api_ synchronously and asynchronously <sup>[1](#notes)</sup>. For async call there are three callbacks available:
 
 - _webhook call_: call external API endpoint when scan is completed
 - _redis pub/sub_: publish scan result to a given _REDIS_ channel
-- _AWS SNS_: publish scan result to a given _SNS Topic_
+- _AWS SNS_: publish scan result to a given _SNS Topic_ which (like on the screencast) can be passed to _AWS Lambda_ function.
 
-In all three cases the message body is the `JSON` containing scan result and `request_id`.
+In all three cases the message body is a `JSON` containing scan result and `request_id`.
 
 #### How to start clamav-rest-api?
 
