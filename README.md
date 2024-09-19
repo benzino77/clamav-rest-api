@@ -2,7 +2,7 @@
 
 This is a simple implementation of REST API for ClamAV virus scanner. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand. Because _clamav-rest-api_ is running locally, you do not need to pass your files to third party entities.
 
-![Screencast](./docs/video/screencast.webm)
+![Screencast](./docs/images/screencast.gif)
 
 The screen recording above is showing how to use _clamav-rest-api_ synchronously and asynchronously <sup>[1](#notes)</sup>. For async call there are three possible paths available:
 
