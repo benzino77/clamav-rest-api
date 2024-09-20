@@ -1,19 +1,34 @@
-#### Overview
+## Overview
 
-This is a simple implementation of REST API for ClamAV virus scanner. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand. Because _clamav-rest-api_ is running locally, you do not need to pass your files to third party entities.
+This is a simple implementation of REST API for ClamAV virus scanner. You can use it to scan files uploaded by users, before they are saved or put into final destination, or to scan files on demand. Because _clamav-rest-api_ is running in your environment, you do not need to pass your files to third party entities.
 
 <video src="https://github.com/user-attachments/assets/54be5afc-776a-4b02-93ac-e010005e1b79">Screencast
 </video>
 
-The screen recording above is showing how to use _clamav-rest-api_ synchronously and asynchronously <sup>[1](#notes)</sup>. For async call there are three callbacks available:
+The screen recording above is showing how to use _clamav-rest-api_ synchronously and asynchronously <sup>[1](#notes)</sup>. There are three types of async callbacks available:
 
-- _webhook call_: call external API endpoint when scan is completed
-- _redis pub/sub_: publish scan result to a given _REDIS_ channel
-- _AWS SNS_: publish scan result to a given _SNS Topic_ which (like on the screencast) can be passed to _AWS Lambda_ function.
+### WEBHOOK Call
 
-In all three cases the message body is a `JSON` containing scan result and `request_id`.
+Call external HTTP endpoint on scan complete.
 
-#### How to start clamav-rest-api?
+<img width="844" height="457" src="docs/images/Postman-webhook.png"></img>
+
+### REDIS pub/sub
+
+Publish scan result to a given _REDIS_ channel on scan complete
+
+<img width="844" height="457" src="docs/images/Postman-redis.png"></img>
+
+### AWS SNS
+
+Publish scan result to a given _SNS Topic_ which (like on the screencast and the screen below) can be passed to _AWS Lambda_ function.
+
+<img width="844" height="457" src="docs/images/Postman-sns.png"></img>
+
+> [!NOTE]
+> In all three cases the message body passed to a callback is a `JSON` object containing scan result and `request_id`.
+
+## How to start clamav-rest-api?
 
 First of all you have to have running ClamAV instance configured to accept TCP connections from `clamav-rest-api` instances. For more details I will guide you to CalmAV documentation ([here](https://blog.clamav.net/2016/06/regarding-use-of-clamav-daemons-tcp.html) and [here](https://www.clamav.net/documents/configuration#clamdconf)) but it's enough to say that you need `TCPSocket 3310` and eventually `TCPAddr` in your `clamd.conf` file. The easiest way is to use docker image with ClamAV already configured. I'm using `clamav/clamav` docker [image](https://hub.docker.com/r/clamav/clamav) during tests and development.
 
@@ -72,7 +87,7 @@ npm install -D # if you want to run tests or examples
 npm start
 ```
 
-##### Configuration
+## Configuration
 
 `clamav-rest-api` needs some information to run properly. For example it needs to know where to find ClamAV. This kind of information can be provided by `.env` file or by setting environment variables. Example `.env` file can be find [here](./.env.example). What you need to do is to copy `.env.example` file to `.env` and edit it to provide configuration parameters which meet your needs.
 Here is a short description of those parameters:
@@ -109,7 +124,7 @@ or
 APP_PORT=8080 NODE_ENV=production CLAMD_IP=clamavd CLAMD_IP=localhost APP_FORM_KEY=FILES npm start
 ```
 
-#### API endpoints
+## API endpoints
 
 There are couple API endpoints:
 
@@ -123,20 +138,20 @@ There are couple API endpoints:
 
 `GET /api/v1/stats` - endpoint which provides information about the number of scanned files, number of infected files and a list of founded viruses. Stats are stored in _REDIS_ <sup>[1](#notes)</sup>.
 
-#### Notes
+## Notes
 
 > [!IMPORTANT]
 > The asynchronous scanning and statistics reports are not included neither in this repository nor `benzino77/clamav-rest-api` docker image
 
 If you are interested in the asynchronous scanning or statistics reports drop me a message at antczak.piotr[@_@]gmail.com with your proposition.
 
-#### Examples
+## Examples
 
-##### wget example
+### wget example
 
 Oooops: _Wget does not currently support "multipart/form-data" for transmitting POST data_
 
-##### curl example
+### curl example
 
 ```
 ❯ curl -s -XPOST http://localhost:3000/api/v1/scan -F FILES=@src/tests/1Mfile01.rnd -F FILES=@src/tests/eicar_com.zip | jq
@@ -161,7 +176,7 @@ Oooops: _Wget does not currently support "multipart/form-data" for transmitting 
 }
 ```
 
-##### httpie example
+### httpie example
 
 ```
 ❯ http --form POST http://localhost:3000/api/v1/scan FILES@src/tests/1Mfile01.rnd FILES@src/tests/eicar_com.zip
@@ -195,11 +210,11 @@ X-Powered-By: Express
 }
 ```
 
-##### Postman example
+### Postman example
 
 ![Postman](./docs/images/Postman.png)
 
-##### Client and server side examples
+### Client and server side examples
 
 Simple examples how to call `clamav-rest-api` (from client/browser side) using form action and axios library can be found in [examples/html](./examples/html) directory.
 
