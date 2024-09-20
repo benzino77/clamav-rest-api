@@ -212,7 +212,9 @@ X-Powered-By: Express
 
 ### Postman example
 
-![Postman](./docs/images/Postman.png)
+![Postman scan](./docs/images/Postman.png)
+
+![Postman statistics](./docs/images/Postman-stats.png)
 
 ### Client and server side examples
 
