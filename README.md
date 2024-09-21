@@ -11,19 +11,19 @@ The screen recording above is showing how to use _clamav-rest-api_ synchronously
 
 Call external HTTP endpoint on scan complete.
 
-<img width="844" height="457" src="docs/images/Postman-webhook.png"></img>
+![Webhook](./docs/images/Postman-webhook.jpg)
 
 ### REDIS pub/sub
 
 Publish scan result to a given _REDIS_ channel on scan complete
 
-<img width="844" height="457" src="docs/images/Postman-redis.png"></img>
+![REDIS pub/sub](./docs/images/Postman-redis.jpg)
 
 ### AWS SNS
 
 Publish scan result to a given _SNS Topic_ which (like on the screencast and the screen below) can be passed to _AWS Lambda_ function.
 
-<img width="844" height="457" src="docs/images/Postman-sns.png"></img>
+![AWS SNS](./docs/images/Postman-sns.jpg)
 
 > [!NOTE]
 > In all three cases the message body passed to a callback is a `JSON` object containing scan result and `request_id`.
@@ -212,9 +212,9 @@ X-Powered-By: Express
 
 ### Postman example
 
-![Postman scan](./docs/images/Postman.png)
+![Postman scan](./docs/images/Postman.jpg)
 
-![Postman statistics](./docs/images/Postman-stats.png)
+![Postman statistics](./docs/images/Postman-stats.jpg)
 
 ### Client and server side examples
 
