@@ -154,7 +154,7 @@ Oooops: _Wget does not currently support "multipart/form-data" for transmitting 
 ### curl example
 
 ```
-❯ curl -s -XPOST http://localhost:3000/api/v1/scan -F FILES=@src/tests/1Mfile01.rnd -F FILES=@src/tests/eicar_com.zip | jq
+❯ curl -s -XPOST http://localhost:3000/api/v1/scan -F FILE=@src/tests/1Mfile01.rnd -F FILE=@src/tests/eicar_com.zip | jq
 {
   "success": true,
   "data": {
@@ -179,7 +179,7 @@ Oooops: _Wget does not currently support "multipart/form-data" for transmitting 
 ### httpie example
 
 ```
-❯ http --form POST http://localhost:3000/api/v1/scan FILES@src/tests/1Mfile01.rnd FILES@src/tests/eicar_com.zip
+❯ http --form POST http://localhost:3000/api/v1/scan FILE@src/tests/1Mfile01.rnd FILE@src/tests/eicar_com.zip
 HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Connection: keep-alive
