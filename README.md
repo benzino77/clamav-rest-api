@@ -28,6 +28,21 @@ Publish scan result to a given _SNS Topic_ which (like on the screencast and the
 > [!NOTE]
 > In all three cases the message body passed to a callback is a `JSON` object containing scan result and `request_id`.
 
+### GCP Cloud Run
+API can be used within GCP Cloud Run, but because of [Google networking quotas](https://cloud.google.com/run/quotas#networking_limits), incoming request will be limited to only 32 MiB for HTTP/1 connections.
+
+To enable HTTP/2 connections without limits, please use Nginx as the main (ingress) container and API & ClamAV as sidecars
+
+**Example Architecture:**
+
+1. GCP secret with Nginx default.conf value. It will provide HTTP2 and proxying requests to API (port 8080)
+2. Main Nginx container uses port 8081 with mounted volume with secret
+3. API container listens on port 8080
+4. Default ClamAV container
+5. Proper dependencies chain (ClamAV -> API -> finally Nginx)
+
+You can find specific examples in the [examples/gcloud](./examples/gcloud) directory.
+
 ## How to start clamav-rest-api?
 
 First of all you have to have running ClamAV instance configured to accept TCP connections from `clamav-rest-api` instances. For more details I will guide you to CalmAV documentation ([here](https://blog.clamav.net/2016/06/regarding-use-of-clamav-daemons-tcp.html) and [here](https://www.clamav.net/documents/configuration#clamdconf)) but it's enough to say that you need `TCPSocket 3310` and eventually `TCPAddr` in your `clamd.conf` file. The easiest way is to use docker image with ClamAV already configured. I'm using `clamav/clamav` docker [image](https://hub.docker.com/r/clamav/clamav) during tests and development.
