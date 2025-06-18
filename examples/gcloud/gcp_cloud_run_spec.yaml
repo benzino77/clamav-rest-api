@@ -1,0 +1,78 @@
+# THIS IS ONLY EXAMPLE PART FOR CLOUD RUN VERSION
+# ADJUST TO YOUR NEEDS OR USE AS REFERENCE
+
+spec:
+  template:
+    metadata:
+      labels:
+        run.googleapis.com/startupProbeType: Custom
+      annotations:
+        autoscaling.knative.dev/minScale: '1' # It's not recommended to use 0 because long cold start time
+        autoscaling.knative.dev/maxScale: '3'
+        run.googleapis.com/container-dependencies: '{"nginx":["clamav-api"],"clamav-api":["clamav"]}'
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - name: h2c
+              containerPort: 8081
+          resources:
+            limits:
+              cpu: '1'
+              memory: 256Mi
+          volumeMounts:
+            - name: nginx-config-volume
+              mountPath: /etc/nginx/conf.d
+          startupProbe:
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 1
+            tcpSocket:
+              port: 8081
+        - name: clamav-api
+          image: 'benzino77/clamav-rest-api:latest'
+          env:
+            - name: PORT
+              value: '8080'
+            - name: APP_PORT
+              value: '8080'
+            - name: APP_FORM_KEY
+              value: FILES
+            - name: CLAMD_IP
+              value: localhost
+            - name: NODE_ENV
+              value: production
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+          startupProbe:
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 3
+            tcpSocket:
+              port: 8080
+        - name: clamav
+          image: 'clamav/clamav:latest'
+          resources:
+            limits:
+              cpu: '2'
+              memory: 4Gi
+          startupProbe:
+            initialDelaySeconds: 120
+            timeoutSeconds: 1
+            periodSeconds: 10
+            failureThreshold: 2
+            tcpSocket:
+              port: 3310
+      volumes:
+        - name: nginx-config-volume
+          secret:
+            secretName: clamav-nginx-config
+            items:
+              - key: latest
+                path: default.conf
