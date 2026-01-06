@@ -1,6 +1,6 @@
 {
   "name": "clamav-rest-api",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "ClamAV REST API. Scan files using simple POST request.",
   "main": "src/app.js",
   "engines": {
@@ -22,11 +22,11 @@
   "author": "Piotr Antczak",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.20.3",
+    "body-parser": "^1.20.4",
     "clamscan": "^2.3.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.21.2",
+    "express": "^4.22.1",
     "express-fileupload": "1.5.1",
     "morgan": "^1.10.1"
   },
