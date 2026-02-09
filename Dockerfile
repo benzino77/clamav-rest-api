@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim
+FROM node:22.13-bookworm-slim
 
 LABEL maintainer="Piotr Antczak <antczak.piotr@gmail.com>"
 WORKDIR /clamav-rest-api
