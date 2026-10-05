@@ -30,7 +30,7 @@
     "morgan": "^1.12.1"
   },
   "devDependencies": {
-    "axios": "^1.18.0",
+    "axios": "^1.20.0",
     "cross-env": "^7.0.3",
     "jest": "29.7.0",
     "node-fetch": "^3.3.2",
