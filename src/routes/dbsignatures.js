@@ -28,12 +28,12 @@ router.route('/').get(async (req, res, next) => {
 
     localVersion = localVersion.split(' ')[1].split('/')[1];
     const remoteVersion = records[0][0].split(':')[2];
-
     res.json({
       success: true,
       data: {
         local_clamav_db_signature: localVersion,
         remote_clamav_db_signature: remoteVersion,
+        diff: remoteVersion === localVersion,
       },
     });
   });
